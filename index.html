@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Sehrgarlari — Interaktiv Animatsiya Maktabi (8-14 yosh)</title>
+  <meta name="description" content="Bolalar uchun interaktiv, o'yinli va amaliy CSS animatsiyalari darsligi. :hover, transition, scale, box-shadow va opacity xususiyatlarini amalda o'rganing.">
+  
+  <!-- Google Fonts: Outfit & Fredoka for playful yet modern typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Canvas Confetti for celebrations -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+</head>
+<body class="theme-dark">
+  <!-- Top Navigation & Header -->
+  <header class="app-header" id="appHeader">
+    <div class="header-left">
+      <div class="brand-logo" id="brandLogo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 40 40" width="36" height="36">
+            <defs>
+              <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#38bdf8"/>
+                <stop offset="50%" stop-color="#a855f7"/>
+                <stop offset="100%" stop-color="#f43f5e"/>
+              </linearGradient>
+            </defs>
+            <circle cx="20" cy="20" r="18" fill="url(#logoGrad)"/>
+            <path d="M12 28 L20 10 L28 28 L20 22 Z" fill="#ffffff"/>
+            <circle cx="20" cy="20" r="4" fill="#fbbf24"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">CSS SEHRGARLARI</span>
+          <span class="brand-subtitle">Animatsiya Laboratoriyasi</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode Switcher: Slides vs Code Lab -->
+    <div class="mode-tabs" role="tablist">
+      <button class="tab-btn active" id="tabSlides" role="tab" aria-selected="true" data-tab="slides">
+        <span class="tab-icon">🚀</span>
+        <span class="tab-label">Sayohat Darslari</span>
+      </button>
+      <button class="tab-btn" id="tabCodeLab" role="tab" aria-selected="false" data-tab="codelab">
+        <span class="tab-icon">🧪</span>
+        <span class="tab-label">Kod Laboratoriyasi</span>
+        <span class="mission-badge" id="missionBadge">0/4</span>
+      </button>
+    </div>
+
+    <!-- Header Controls: Sound & Progress -->
+    <div class="header-right">
+      <div class="star-counter" id="starCounter" title="To'plangan yulduzchalar">
+        <span class="star-icon">⭐</span>
+        <span class="star-num" id="starNum">0</span>
+      </div>
+      <button class="control-btn" id="audioToggle" aria-label="Ovozni yoqish yoki o'chirish" title="Ovoz: Yoqilgan">
+        <span class="btn-icon" id="audioIcon">🔊</span>
+      </button>
+      <button class="control-btn" id="certBtn" aria-label="Sertifikatni ko'rish" title="Sertifikatni olish">
+        <span class="btn-icon">🏆</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Application Container -->
+  <main class="main-content" id="mainContent">
+    
+    <!-- VIEW 1: INTERACTIVE SLIDE DECK -->
+    <section class="view-section active" id="slidesView">
+      
+      <!-- Progress Bar & Breadcrumbs -->
+      <div class="slide-progress-bar-container">
+        <div class="slide-progress-bar" id="slideProgressBar" style="width: 16.66%;"></div>
+      </div>
+
+      <nav class="slide-stepper" id="slideStepper" aria-label="Darslar xaritasi">
+        <button class="step-dot active" data-slide="0" title="1-dars: :hover"><span>1</span><label>:hover</label></button>
+        <button class="step-dot" data-slide="1" title="2-dars: opacity"><span>2</span><label>opacity</label></button>
+        <button class="step-dot" data-slide="2" title="3-dars: scale()"><span>3</span><label>scale()</label></button>
+        <button class="step-dot" data-slide="3" title="4-dars: box-shadow"><span>4</span><label>box-shadow</label></button>
+        <button class="step-dot" data-slide="4" title="5-dars: transition"><span>5</span><label>transition</label></button>
+        <button class="step-dot" data-slide="5" title="6-dars: Barchasi birga"><span>6</span><label>Super Sehr</label></button>
+      </nav>
+
+      <!-- Slides Carousel Wrapper -->
+      <div class="slides-viewport" id="slidesViewport">
+
+        <!-- SLIDE 1: :hover -->
+        <article class="slide-card active" data-index="0" id="slide1">
+          <div class="slide-header">
+            <span class="slide-tag">:hover sehri</span>
+            <h1 class="slide-title">Sehrli Qo'l: Sichqoncha tekkanda nima bo'ladi?</h1>
+            <p class="slide-subtitle">Sichqonchangizni uxlab yotgan robota yaqinlashtiring va uni uyg'oting!</p>
+          </div>
+
+          <div class="slide-interactive-stage">
+            <!-- Sleepy Robot Playground -->
+            <div class="stage-scene" id="sceneRobotStage">
+              <div class="hover-prompt-hand" id="promptHand1">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="#facc15">
+                  <path d="M9 11.24V7.5a2.5 2.5 0 0 1 5 0v3.74c1.21-.81 2-2.18 2-3.74a4.5 4.5 0 0 0-9 0c0 1.56.79 2.93 2 3.74zM12 2a5.5 5.5 0 0 1 5.5 5.5c0 1.6-.7 3.04-1.79 4.04l.79.79c1.6-1.39 2.5-3.37 2.5-5.53A8 8 0 0 0 4 6.8v.7c0 2.16.9 4.14 2.5 5.53l.79-.79C6.2 11.24 5.5 9.8 5.5 8.2A5.5 5.5 0 0 1 12 2zM6 13h12v9H6z"/>
+                </svg>
+                <span>Boshqaruvni robot ustiga keltiring!</span>
+              </div>
+
+              <!-- Interactive Cute Robot SVG -->
+              <div class="interactive-robot-target" id="robotChar" tabindex="0" role="button" aria-label="Uyg'onuvchi robot">
+                <svg viewBox="0 0 200 240" class="robot-svg" width="180" height="216">
+                  <!-- Antenna -->
+                  <g class="robot-antenna">
+                    <line x1="100" y1="50" x2="100" y2="25" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
+                    <circle cx="100" cy="18" r="10" class="antenna-bulb" fill="#475569"/>
+                    <circle cx="100" cy="18" r="16" class="antenna-glow" fill="#38bdf8" opacity="0"/>
+                  </g>
+                  
+                  <!-- Left Arm -->
+                  <g class="robot-arm-left">
+                    <rect x="25" y="115" width="18" height="50" rx="9" fill="#0284c7"/>
+                    <circle cx="34" cy="170" r="9" fill="#38bdf8"/>
+                  </g>
+                  
+                  <!-- Right Arm (waves on hover) -->
+                  <g class="robot-arm-right" id="robotRightArm">
+                    <rect x="157" y="115" width="18" height="50" rx="9" fill="#0284c7"/>
+                    <circle cx="166" cy="170" r="9" fill="#38bdf8"/>
+                  </g>
+
+                  <!-- Body -->
+                  <rect x="50" y="105" width="100" height="90" rx="20" fill="#0369a1" stroke="#38bdf8" stroke-width="4"/>
+                  <!-- Body screen/meter -->
+                  <rect x="70" y="125" width="60" height="50" rx="10" fill="#082f49"/>
+                  <path class="heartbeat-line" d="M75 150 L88 150 L95 135 L105 165 L112 150 L125 150" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round"/>
+
+                  <!-- Head -->
+                  <rect x="45" y="45" width="110" height="65" rx="18" fill="#0284c7" stroke="#38bdf8" stroke-width="4"/>
+                  
+                  <!-- Visor/Eyes background -->
+                  <rect x="60" y="58" width="80" height="38" rx="12" fill="#0c4a6e"/>
+
+                  <!-- Sleeping Eyes (Default) -->
+                  <g class="eyes-sleeping" id="eyesSleeping">
+                    <path d="M72 78 Q 80 84 88 78" stroke="#38bdf8" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                    <path d="M112 78 Q 120 84 128 78" stroke="#38bdf8" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                    <!-- Zzz sleeping bubbles -->
+                    <text x="145" y="40" class="zzz-text" fill="#93c5fd" font-size="18" font-weight="bold">Zzz...</text>
+                  </g>
+
+                  <!-- Awake Cheerful Eyes (Hover) -->
+                  <g class="eyes-awake" id="eyesAwake">
+                    <circle cx="80" cy="77" r="10" fill="#facc15"/>
+                    <circle cx="83" cy="74" r="3.5" fill="#ffffff"/>
+                    <circle cx="120" cy="77" r="10" fill="#facc15"/>
+                    <circle cx="123" cy="74" r="3.5" fill="#ffffff"/>
+                    <path d="M93 88 Q 100 94 107 88" stroke="#facc15" stroke-width="3" fill="none" stroke-linecap="round"/>
+                  </g>
+
+                  <!-- Legs -->
+                  <rect x="72" y="195" width="16" height="25" rx="6" fill="#0284c7"/>
+                  <rect x="112" y="195" width="16" height="25" rx="6" fill="#0284c7"/>
+                  <rect x="65" y="215" width="30" height="12" rx="6" fill="#38bdf8"/>
+                  <rect x="105" y="215" width="30" height="12" rx="6" fill="#38bdf8"/>
+                </svg>
+
+                <div class="hover-status-badge" id="hoverStatusBadge">
+                  <span class="status-dot"></span>
+                  <span class="status-text">Holat: Uxlab yotibdi 😴</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Code Insight Card -->
+            <div class="code-insight-panel">
+              <div class="panel-header">
+                <span class="terminal-dots"><i></i><i></i><i></i></span>
+                <span class="panel-title">Sehr qanday ishlaydi?</span>
+              </div>
+              <div class="code-snippet">
+                <span class="code-selector">.robot<span class="highlight-pseudo">:hover</span> {</span>
+                <div class="code-body">
+                  <span class="code-prop">transform</span>: <span class="code-val">translateY(-15px)</span>; <span class="code-comment">/* Yuqoriga sakraydi */</span><br>
+                  <span class="code-prop">filter</span>: <span class="code-val">drop-shadow(0 0 20px #38bdf8)</span>; <span class="code-comment">/* Nurlanadi */</span>
+                </div>
+                <span class="code-close">}</span>
+              </div>
+              <div class="mini-explanation">
+                <span class="bulb-icon">💡</span>
+                <p><strong>:hover</strong> — sichqoncha biror element ustiga borganda ko'rinishni o'zgartiruvchi sehrli eshikdir!</p>
+              </div>
+              <button class="try-btn" id="btnTestHover">Teginib ko'rish (Simulyatsiya)</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- SLIDE 2: opacity -->
+        <article class="slide-card" data-index="1" id="slide2">
+          <div class="slide-header">
+            <span class="slide-tag">opacity sehri</span>
+            <h1 class="slide-title">Ko'rinmaslik Plashi: Shaffoflik siri</h1>
+            <p class="slide-subtitle">Slayderni suring: 0 — ko'rinmas arvoh, 1 — haqiqiy qahramon!</p>
+          </div>
+
+          <div class="slide-interactive-stage">
+            <div class="stage-scene scene-space" id="sceneGhostStage">
+              <!-- Starry space background -->
+              <div class="star-field">
+                <span class="bg-star star-1">✨</span>
+                <span class="bg-star star-2">⭐</span>
+                <span class="bg-star star-3">🌟</span>
+                <span class="bg-star star-4">🪐</span>
+              </div>
+
+              <!-- Cute Magical Ghost Creature -->
+              <div class="ghost-wrapper" id="ghostWrapper">
+                <svg viewBox="0 0 180 200" width="160" height="180" class="ghost-svg" id="ghostSvg">
+                  <defs>
+                    <linearGradient id="ghostGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="#c084fc"/>
+                      <stop offset="100%" stop-color="#818cf8"/>
+                    </linearGradient>
+                  </defs>
+                  <!-- Floating Aura -->
+                  <ellipse cx="90" cy="185" rx="55" ry="10" fill="#6366f1" opacity="0.4"/>
+                  <!-- Ghost Body -->
+                  <path d="M40 100 C 40 40, 140 40, 140 100 C 140 145, 130 170, 120 160 C 110 150, 100 170, 90 160 C 80 150, 70 170, 60 160 C 50 150, 40 155, 40 100 Z" fill="url(#ghostGrad)" stroke="#e0e7ff" stroke-width="3"/>
+                  <!-- Big Kawaii Eyes -->
+                  <ellipse cx="70" cy="85" rx="8" ry="12" fill="#1e1b4b"/>
+                  <circle cx="73" cy="80" r="4" fill="#ffffff"/>
+                  <ellipse cx="110" cy="85" rx="8" ry="12" fill="#1e1b4b"/>
+                  <circle cx="113" cy="80" r="4" fill="#ffffff"/>
+                  <!-- Cheerful Mouth & Cheeks -->
+                  <circle cx="58" cy="98" r="6" fill="#f472b6" opacity="0.7"/>
+                  <circle cx="122" cy="98" r="6" fill="#f472b6" opacity="0.7"/>
+                  <path d="M84 96 Q 90 102 96 96" stroke="#1e1b4b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                  <!-- Magic Wand -->
+                  <line x1="130" y1="110" x2="160" y2="80" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/>
+                  <polygon points="160,74 162,79 167,80 163,83 164,88 160,85 156,88 157,83 153,80 158,79" fill="#fef08a"/>
+                </svg>
+                <div class="ghost-value-tag" id="ghostValueTag">opacity: 1</div>
+              </div>
+            </div>
+
+            <!-- Opacity Control Deck -->
+            <div class="code-insight-panel">
+              <div class="slider-control-card">
+                <div class="slider-header">
+                  <span class="control-label">🔮 Shaffoflik darajasi:</span>
+                  <span class="slider-val-badge" id="opacityValDisplay">1.00</span>
+                </div>
+                <input type="range" id="opacitySlider" class="tactile-slider" min="0" max="1" step="0.05" value="1" aria-label="Shaffoflik darajasi">
+                
+                <div class="slider-presets">
+                  <button class="preset-pill" data-opacity="0">0 (Ko'rinmas)</button>
+                  <button class="preset-pill" data-opacity="0.5">0.5 (Yarim shaffof)</button>
+                  <button class="preset-pill active" data-opacity="1">1 (To'liq ko'rinish)</button>
+                </div>
+              </div>
+
+              <div class="code-snippet">
+                <span class="code-selector">.arvoh-plashi {</span>
+                <div class="code-body">
+                  <span class="code-prop">opacity</span>: <span class="code-val" id="codeOpacityVal">1.0</span>;
+                </div>
+                <span class="code-close">}</span>
+              </div>
+
+              <div class="mini-explanation">
+                <span class="bulb-icon">💡</span>
+                <p><strong>opacity</strong> qiymati <code>0</code> (mutlaqo ko'rinmas) dan <code>1</code> (to'liq ko'rinuvchi) gacha bo'ladi!</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- SLIDE 3: transform: scale() -->
+        <article class="slide-card" data-index="2" id="slide3">
+          <div class="slide-header">
+            <span class="slide-tag">transform: scale() sehri</span>
+            <h1 class="slide-title">Sehrli Lupa: Kattalashtirish va Kichraytirish</h1>
+            <p class="slide-subtitle">Elastik sandiqchani kattalashtirib, uning qanday sakrashini tomosha qiling!</p>
+          </div>
+
+          <div class="slide-interactive-stage">
+            <div class="stage-scene" id="sceneScaleStage">
+              <!-- Treasure Chest / Slime Target -->
+              <div class="elastic-chest-container" id="elasticChest">
+                <svg viewBox="0 0 160 160" width="140" height="140" class="chest-svg" id="chestSvg">
+                  <defs>
+                    <linearGradient id="chestGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#f59e0b"/>
+                      <stop offset="50%" stop-color="#d97706"/>
+                      <stop offset="100%" stop-color="#78350f"/>
+                    </linearGradient>
+                    <radialGradient id="gemGlow" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#38bdf8"/>
+                      <stop offset="100%" stop-color="#0284c7"/>
+                    </radialGradient>
+                  </defs>
+                  <!-- Base Platform Shadow -->
+                  <ellipse cx="80" cy="145" rx="50" ry="12" fill="#0f172a" opacity="0.6"/>
+                  <!-- Chest Body -->
+                  <rect x="25" y="70" width="110" height="65" rx="14" fill="url(#chestGrad)" stroke="#fde68a" stroke-width="4"/>
+                  <!-- Chest Banding -->
+                  <rect x="25" y="70" width="110" height="14" fill="#451a03"/>
+                  <line x1="55" y1="70" x2="55" y2="135" stroke="#451a03" stroke-width="8"/>
+                  <line x1="105" y1="70" x2="105" y2="135" stroke="#451a03" stroke-width="8"/>
+                  <!-- Chest Lid -->
+                  <path d="M22 70 Q 80 25 138 70 Z" fill="#d97706" stroke="#fde68a" stroke-width="4"/>
+                  <!-- Glowing Magic Lock/Keyhole -->
+                  <circle cx="80" cy="85" r="14" fill="url(#gemGlow)" stroke="#fde68a" stroke-width="3"/>
+                  <circle cx="80" cy="85" r="4" fill="#ffffff"/>
+                  <!-- Sparkles around -->
+                  <path class="chest-sparkle" d="M30 40 L35 30 L40 40 L50 45 L40 50 L35 60 L30 50 L20 45 Z" fill="#facc15"/>
+                  <path class="chest-sparkle" d="M130 35 L133 28 L136 35 L143 38 L136 41 L133 48 L130 41 L123 38 Z" fill="#38bdf8"/>
+                </svg>
+                <div class="scale-factor-badge" id="scaleFactorBadge">scale(1.0)</div>
+              </div>
+            </div>
+
+            <!-- Scale Controls -->
+            <div class="code-insight-panel">
+              <div class="slider-control-card">
+                <div class="slider-header">
+                  <span class="control-label">🔍 Kattalashtirish koeffitsienti:</span>
+                  <span class="slider-val-badge" id="scaleValDisplay">1.0x</span>
+                </div>
+                <input type="range" id="scaleSlider" class="tactile-slider" min="0.5" max="2.2" step="0.1" value="1" aria-label="Kattalashtirish koeffitsienti">
+                
+                <div class="slider-presets">
+                  <button class="preset-pill" data-scale="0.8">0.8x (Kichik)</button>
+                  <button class="preset-pill active" data-scale="1.0">1.0x (Asl)</button>
+                  <button class="preset-pill" data-scale="1.3">1.3x (Katta)</button>
+                  <button class="preset-pill" data-scale="1.8">1.8x (Gigant!)</button>
+                </div>
+              </div>
+
+              <div class="code-snippet">
+                <span class="code-selector">.sehrli-sandiq {</span>
+                <div class="code-body">
+                  <span class="code-prop">transform</span>: <span class="code-val" id="codeScaleVal">scale(1.0)</span>;
+                </div>
+                <span class="code-close">}</span>
+              </div>
+
+              <div class="mini-explanation">
+                <span class="bulb-icon">💡</span>
+                <p><strong>transform: scale()</strong> elementni markazidan boshlab kattalashtiradi yoki kichraytiradi!</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- SLIDE 4: box-shadow -->
+        <article class="slide-card" data-index="3" id="slide4">
+          <div class="slide-header">
+            <span class="slide-tag">box-shadow sehri</span>
+            <h1 class="slide-title">Quyosh va Soya: 3D Parvoz va Balandlik</h1>
+            <p class="slide-subtitle">Kosmik kemani havoga ko'taring: soya uzoqlashgani sari kema balandroq uchadi!</p>
+          </div>
+
+          <div class="slide-interactive-stage">
+            <div class="stage-scene scene-hangar" id="sceneShadowStage">
+              <!-- Draggable / Levitating UFO -->
+              <div class="ufo-levitation-zone">
+                <div class="interactive-ufo-card" id="ufoCard">
+                  <svg viewBox="0 0 160 120" width="140" height="105" class="ufo-svg">
+                    <defs>
+                      <linearGradient id="ufoDome" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#67e8f9"/>
+                        <stop offset="100%" stop-color="#0891b2"/>
+                      </linearGradient>
+                      <linearGradient id="ufoBodyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#475569"/>
+                        <stop offset="50%" stop-color="#94a3b8"/>
+                        <stop offset="100%" stop-color="#334155"/>
+                      </linearGradient>
+                    </defs>
+                    <!-- Glass Dome with Alien -->
+                    <ellipse cx="80" cy="48" rx="35" ry="28" fill="url(#ufoDome)" opacity="0.85" stroke="#a5f3fc" stroke-width="2"/>
+                    <!-- Cute Green Alien inside -->
+                    <circle cx="80" cy="46" r="14" fill="#22c55e"/>
+                    <circle cx="75" cy="43" r="3" fill="#000000"/>
+                    <circle cx="85" cy="43" r="3" fill="#000000"/>
+                    <path d="M77 52 Q 80 55 83 52" stroke="#000000" stroke-width="2" fill="none"/>
+                    <line x1="80" y1="32" x2="80" y2="24" stroke="#22c55e" stroke-width="3"/>
+                    <circle cx="80" cy="22" r="4" fill="#facc15"/>
+                    <!-- UFO Metal Saucer -->
+                    <ellipse cx="80" cy="65" rx="72" ry="20" fill="url(#ufoBodyGrad)" stroke="#cbd5e1" stroke-width="3"/>
+                    <ellipse cx="80" cy="72" rx="45" ry="12" fill="#1e293b"/>
+                    <!-- Flashing Lights -->
+                    <circle cx="30" cy="67" r="5" fill="#f43f5e" class="ufo-light"/>
+                    <circle cx="55" cy="72" r="5" fill="#fbbf24" class="ufo-light"/>
+                    <circle cx="80" cy="74" r="5" fill="#38bdf8" class="ufo-light"/>
+                    <circle cx="105" cy="72" r="5" fill="#fbbf24" class="ufo-light"/>
+                    <circle cx="130" cy="67" r="5" fill="#f43f5e" class="ufo-light"/>
+                  </svg>
+                </div>
+                <!-- Landing Pad -->
+                <div class="landing-pad" id="landingPad">
+                  <div class="pad-ring"></div>
+                  <span class="pad-cross">+</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shadow Controls -->
+            <div class="code-insight-panel">
+              <div class="slider-control-card">
+                <div class="slider-header">
+                  <span class="control-label">🚀 Parvoz balandligi (Soya):</span>
+                  <span class="slider-val-badge" id="elevationValDisplay">Baland (30px)</span>
+                </div>
+                <input type="range" id="shadowElevationSlider" class="tactile-slider" min="0" max="60" step="5" value="25" aria-label="Parvoz balandligi">
+                
+                <div class="shadow-color-picker-row">
+                  <span class="control-label">✨ Nurlanish rangi:</span>
+                  <div class="color-swatches" id="shadowColorSwatches">
+                    <button class="color-swatch active" data-color="#0284c7" style="background: #0284c7;" title="Kosmik Moviy"></button>
+                    <button class="color-swatch" data-color="#a855f7" style="background: #a855f7;" title="Sehrli Binafsha"></button>
+                    <button class="color-swatch" data-color="#f59e0b" style="background: #f59e0b;" title="Quyosh Olovi"></button>
+                    <button class="color-swatch" data-color="#10b981" style="background: #10b981;" title="Zangori Zang"></button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="code-snippet">
+                <span class="code-selector">.uchuvchi-tareka {</span>
+                <div class="code-body">
+                  <span class="code-prop">box-shadow</span>: <span class="code-val" id="codeShadowVal">0 25px 40px #0284c7</span>;
+                </div>
+                <span class="code-close">}</span>
+              </div>
+
+              <div class="mini-explanation">
+                <span class="bulb-icon">💡</span>
+                <p><strong>box-shadow</strong> orqali elementga yumshoq soya yoki sehrli nur berib, uni ekrandan 3D ko'tarish mumkin!</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- SLIDE 5: transition -->
+        <article class="slide-card" data-index="4" id="slide5">
+          <div class="slide-header">
+            <span class="slide-tag">transition sehri</span>
+            <h1 class="slide-title">Sakrash emas, Silliq Harakat! (Poyga)</h1>
+            <p class="slide-subtitle">Ikkita kosmik kema poygasi: transitionsiz kema sakraydi, transitionli kema esa silliq uchadi!</p>
+          </div>
+
+          <div class="slide-interactive-stage">
+            <div class="stage-scene scene-race-track" id="sceneRaceStage">
+              <!-- Race Lane 1: No Transition -->
+              <div class="race-lane">
+                <div class="lane-label">
+                  <span class="lane-badge red">❌ Transitionsiz</span>
+                  <span class="lane-status">Qo'pol va to'satdan sakraydi</span>
+                </div>
+                <div class="track-line">
+                  <div class="racing-ship ship-no-transition" id="shipNoTrans">
+                    🚀 <span class="ship-name">Tezkor-1</span>
+                  </div>
+                  <div class="finish-line">🏁 MARRA</div>
+                </div>
+              </div>
+
+              <!-- Race Lane 2: With Transition -->
+              <div class="race-lane">
+                <div class="lane-label">
+                  <span class="lane-badge green">✅ Transition bor!</span>
+                  <span class="lane-status" id="transSpeedLabel">0.6 soniyada silliq</span>
+                </div>
+                <div class="track-line">
+                  <div class="racing-ship ship-with-transition" id="shipWithTrans">
+                    🛸 <span class="ship-name">Silliq-2</span>
+                  </div>
+                  <div class="finish-line">🏁 MARRA</div>
+                </div>
+              </div>
+
+              <div class="race-action-bar">
+                <button class="race-btn" id="btnStartRace">
+                  <span>🏁 Poygani Boshlash!</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Transition Speed Controls -->
+            <div class="code-insight-panel">
+              <div class="slider-control-card">
+                <div class="slider-header">
+                  <span class="control-label">⏱️ Silliq o'tish vaqti (Duration):</span>
+                  <span class="slider-val-badge" id="durationValDisplay">0.6s</span>
+                </div>
+                <input type="range" id="durationSlider" class="tactile-slider" min="0.1" max="2.0" step="0.1" value="0.6" aria-label="Silliq o'tish vaqti">
+                
+                <div class="slider-presets">
+                  <button class="preset-pill" data-dur="0.2">0.2s (Juda tez)</button>
+                  <button class="preset-pill active" data-dur="0.6">0.6s (Ideal)</button>
+                  <button class="preset-pill" data-dur="1.5">1.5s (Sekin)</button>
+                </div>
+              </div>
+
+              <div class="code-snippet">
+                <span class="code-selector">.silliq-raketa {</span>
+                <div class="code-body">
+                  <span class="code-prop">transition</span>: <span class="code-val" id="codeDurationVal">0.6s ease-in-out</span>;
+                </div>
+                <span class="code-close">}</span>
+              </div>
+
+              <div class="mini-explanation">
+                <span class="bulb-icon">💡</span>
+                <p><strong>transition</strong> — animatsiyaning vaqt o'lchovchisi bo'lib, o'zgarishlarni qo'pol sakrashdan silliq harakatga aylantiradi!</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- SLIDE 6: Master Synergy -->
+        <article class="slide-card" data-index="5" id="slide6">
+          <div class="slide-header">
+            <span class="slide-tag">Super Birlashuv</span>
+            <h1 class="slide-title">Barcha Sehrlarni Birlashtiramiz!</h1>
+            <p class="slide-subtitle">:hover + scale + box-shadow + opacity + transition = Super Raketa!</p>
+          </div>
+
+          <div class="slide-interactive-stage">
+            <div class="stage-scene scene-launchpad" id="sceneSynergyStage">
+              <!-- Interactive Mega Rocket -->
+              <div class="mega-rocket-wrapper" id="megaRocketWrapper">
+                <div class="mega-rocket" id="megaRocket" tabindex="0" role="button" aria-label="Super Kosmik Raketa">
+                  <svg viewBox="0 0 160 220" width="150" height="206" class="mega-rocket-svg">
+                    <defs>
+                      <linearGradient id="rocketBodyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#e11d48"/>
+                        <stop offset="50%" stop-color="#fb7185"/>
+                        <stop offset="100%" stop-color="#be123c"/>
+                      </linearGradient>
+                      <linearGradient id="rocketWingGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#0284c7"/>
+                        <stop offset="100%" stop-color="#0369a1"/>
+                      </linearGradient>
+                      <linearGradient id="flameGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#fef08a"/>
+                        <stop offset="40%" stop-color="#f97316"/>
+                        <stop offset="100%" stop-color="#ef4444"/>
+                      </linearGradient>
+                    </defs>
+
+                    <!-- Thruster Fire -->
+                    <g class="thruster-flames" id="rocketFlames">
+                      <polygon points="80,215 65,175 95,175" fill="url(#flameGrad)"/>
+                      <polygon points="80,200 72,175 88,175" fill="#fef08a"/>
+                    </g>
+
+                    <!-- Wings -->
+                    <polygon points="40,140 10,180 45,170" fill="url(#rocketWingGrad)"/>
+                    <polygon points="120,140 150,180 115,170" fill="url(#rocketWingGrad)"/>
+
+                    <!-- Main Rocket Fuselage -->
+                    <path d="M80 20 C 50 70, 45 130, 45 170 L 115 170 C 115 130, 110 70, 80 20 Z" fill="url(#rocketBodyGrad)" stroke="#ffffff" stroke-width="3"/>
+                    
+                    <!-- Porthole Window -->
+                    <circle cx="80" cy="90" r="22" fill="#0284c7" stroke="#ffffff" stroke-width="4"/>
+                    <circle cx="80" cy="90" r="16" fill="#38bdf8"/>
+                    <circle cx="75" cy="85" r="5" fill="#ffffff" opacity="0.8"/>
+                    
+                    <!-- Nosecone Tip -->
+                    <polygon points="80,10 70,35 90,35" fill="#fbbf24"/>
+                  </svg>
+                </div>
+                <div class="synergy-status-badge" id="synergyStatusBadge">Sichqonchani raketa ustiga olib keling!</div>
+              </div>
+            </div>
+
+            <!-- Synergy Controls & Code Overview -->
+            <div class="code-insight-panel">
+              <div class="toggles-grid">
+                <label class="toggle-pill active" data-prop="scale">
+                  <input type="checkbox" id="chkScale" checked>
+                  <span>🔍 scale(1.15)</span>
+                </label>
+                <label class="toggle-pill active" data-prop="shadow">
+                  <input type="checkbox" id="chkShadow" checked>
+                  <span>✨ box-shadow</span>
+                </label>
+                <label class="toggle-pill active" data-prop="trans">
+                  <input type="checkbox" id="chkTrans" checked>
+                  <span>⏱️ transition: 0.4s</span>
+                </label>
+              </div>
+
+              <div class="code-snippet">
+                <span class="code-selector">.super-raketa {</span>
+                <div class="code-body">
+                  <span class="code-prop">transition</span>: <span class="code-val">all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)</span>;
+                </div>
+                <span class="code-selector">}</span><br>
+                <span class="code-selector">.super-raketa:hover {</span>
+                <div class="code-body">
+                  <span class="code-prop">transform</span>: <span class="code-val">scale(1.15) translateY(-20px)</span>;<br>
+                  <span class="code-prop">box-shadow</span>: <span class="code-val">0 25px 50px #f59e0b</span>;
+                </div>
+                <span class="code-close">}</span>
+              </div>
+
+              <button class="launch-master-btn" id="btnLaunchLab">
+                <span>🧪 Kod Laboratoriyasiga O'tish!</span>
+                <span class="arrow-icon">➔</span>
+              </button>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Slide Navigation Footer -->
+      <footer class="slide-footer">
+        <button class="nav-btn prev-btn" id="btnPrevSlide" aria-label="Oldingi dars">
+          <span>◀ Oldingi</span>
+        </button>
+        <div class="slide-indicator" id="slideIndicator">1 / 6</div>
+        <button class="nav-btn next-btn" id="btnNextSlide" aria-label="Keyingi dars">
+          <span>Keyingi ▶</span>
+        </button>
+      </footer>
+
+    </section>
+
+
+    <!-- VIEW 2: IN-BROWSER CODE COMPILER & MISSIONS -->
+    <section class="view-section" id="codeLabView">
+      
+      <!-- Missions Sidebar & Selector -->
+      <aside class="lab-missions-sidebar">
+        <div class="sidebar-header">
+          <h2 class="sidebar-title">🎯 Missiyalar</h2>
+          <span class="sidebar-subtitle">Topshiriqlarni bajaring va yulduzlarni yutib oling!</span>
+        </div>
+
+        <div class="missions-list" id="missionsList">
+          <!-- Mission 1 -->
+          <button class="mission-card active" data-mission="1" id="mCard1">
+            <div class="m-status-icon">⭐</div>
+            <div class="m-info">
+              <span class="m-num">1-Missiya</span>
+              <span class="m-name">Kattalashtirish (scale)</span>
+            </div>
+            <span class="m-check">⚪</span>
+          </button>
+
+          <!-- Mission 2 -->
+          <button class="mission-card" data-mission="2" id="mCard2">
+            <div class="m-status-icon">⭐</div>
+            <div class="m-info">
+              <span class="m-num">2-Missiya</span>
+              <span class="m-name">Silliq O'tish (transition)</span>
+            </div>
+            <span class="m-check">⚪</span>
+          </button>
+
+          <!-- Mission 3 -->
+          <button class="mission-card" data-mission="3" id="mCard3">
+            <div class="m-status-icon">⭐</div>
+            <div class="m-info">
+              <span class="m-num">3-Missiya</span>
+              <span class="m-name">Olovli Nur (box-shadow)</span>
+            </div>
+            <span class="m-check">⚪</span>
+          </button>
+
+          <!-- Mission 4 -->
+          <button class="mission-card" data-mission="4" id="mCard4">
+            <div class="m-status-icon">⭐</div>
+            <div class="m-info">
+              <span class="m-num">4-Missiya</span>
+              <span class="m-name">Super Sinov (Master Synergy)</span>
+            </div>
+            <span class="m-check">⚪</span>
+          </button>
+        </div>
+
+        <!-- Kid helper box -->
+        <div class="mentor-box">
+          <div class="mentor-avatar">🤖</div>
+          <div class="mentor-bubble" id="mentorBubble">
+            Salom, yosh dasturchi! Kod yozishda yordam kerak bo'lsa, sehrli bloklardan foydalanishingiz mumkin!
+          </div>
+        </div>
+      </aside>
+
+      <!-- Code Lab Main Arena (Split Screen) -->
+      <div class="lab-workspace">
+        
+        <!-- Mission Objective Banner -->
+        <div class="mission-banner" id="missionBanner">
+          <div class="banner-icon">🎯</div>
+          <div class="banner-details">
+            <h3 class="banner-title" id="bannerTitle">1-Missiya: Raketani 20% kattalashtiring!</h3>
+            <p class="banner-desc" id="bannerDesc">Raketaga sichqoncha tekkanda <code>transform: scale(1.2);</code> bo'lsin.</p>
+          </div>
+        </div>
+
+        <!-- Split Grid: Code Editor on Left, Live Canvas on Right -->
+        <div class="split-editor-grid">
+          
+          <!-- LEFT: Simplified Smart Code Editor -->
+          <div class="editor-pane">
+            <div class="pane-header">
+              <div class="header-tab">
+                <span class="file-icon">🎨</span>
+                <span class="file-name">style.css</span>
+              </div>
+              <div class="editor-tools">
+                <button class="tool-btn" id="btnResetCode" title="Boshlang'ich kodga qaytarish">🔄 Qaytarish</button>
+              </div>
+            </div>
+
+            <!-- Interactive Visual Smart Block Inserters -->
+            <div class="smart-blocks-shelf">
+              <span class="shelf-label">⚡ Tezkor Sehrli Bloklar:</span>
+              <div class="blocks-container" id="smartBlocks">
+                <!-- Injected dynamically based on mission -->
+              </div>
+            </div>
+
+            <!-- Code Editor Box -->
+            <div class="code-editor-wrapper">
+              <div class="editor-line-numbers">
+                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+              </div>
+              <textarea class="code-textarea" id="cssEditor" spellcheck="false" aria-label="CSS kod muharriri"></textarea>
+            </div>
+
+            <!-- Feedback & Hint Console -->
+            <div class="editor-console" id="editorConsole">
+              <div class="console-status" id="consoleStatus">
+                <span class="status-icon">💡</span>
+                <span class="status-msg" id="consoleMsg">Kodni yozing va o'ng tarafdagi raketada natijani sinab ko'ring!</span>
+              </div>
+              <button class="verify-btn" id="btnVerifyMission">
+                <span>Tekshirish va Yuborish 🚀</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- RIGHT: Real-Time Interactive Canvas -->
+          <div class="canvas-pane">
+            <div class="pane-header">
+              <div class="header-tab">
+                <span class="file-icon">👁️</span>
+                <span class="file-name">Jonli Natija (Live Canvas)</span>
+              </div>
+              <div class="canvas-state-indicator" id="canvasIndicator">
+                <span class="live-dot"></span>
+                <span>Real vaqt rejimi</span>
+              </div>
+            </div>
+
+            <div class="canvas-stage" id="liveCanvasStage">
+              <div class="canvas-hint-overlay" id="canvasHoverPrompt">
+                👆 Sichqonchangizni raketa ustiga olib boring!
+              </div>
+
+              <!-- Live Styled Target Rocket Container -->
+              <div class="lab-rocket-actor" id="labRocketActor" tabindex="0" role="button" aria-label="Laboratoriya raketasi">
+                <svg viewBox="0 0 160 220" width="160" height="220" class="lab-svg">
+                  <!-- Rocket SVG Structure -->
+                  <g class="lab-flame-group">
+                    <polygon points="80,215 65,175 95,175" fill="#f97316"/>
+                    <polygon points="80,200 72,175 88,175" fill="#fef08a"/>
+                  </g>
+                  <polygon points="40,140 10,180 45,170" fill="#3b82f6"/>
+                  <polygon points="120,140 150,180 115,170" fill="#3b82f6"/>
+                  <path d="M80 20 C 50 70, 45 130, 45 170 L 115 170 C 115 130, 110 70, 80 20 Z" fill="#ec4899" stroke="#ffffff" stroke-width="3"/>
+                  <circle cx="80" cy="90" r="22" fill="#0284c7" stroke="#ffffff" stroke-width="4"/>
+                  <circle cx="80" cy="90" r="16" fill="#38bdf8"/>
+                  <circle cx="75" cy="85" r="5" fill="#ffffff" opacity="0.8"/>
+                  <polygon points="80,10 70,35 90,35" fill="#fbbf24"/>
+                </svg>
+              </div>
+
+              <!-- Computed Live Metric Overlay -->
+              <div class="live-metric-card" id="liveMetricCard">
+                <div class="metric-row">
+                  <span>Transform:</span> <strong id="metricTransform">none</strong>
+                </div>
+                <div class="metric-row">
+                  <span>Transition:</span> <strong id="metricTransition">all 0s</strong>
+                </div>
+                <div class="metric-row">
+                  <span>Box Shadow:</span> <strong id="metricShadow">none</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- CELEBRATION & DIGITAL CERTIFICATE MODAL -->
+  <div class="modal-backdrop" id="certModal" role="dialog" aria-modal="true" aria-labelledby="certTitle" hidden>
+    <div class="modal-card">
+      <button class="modal-close-btn" id="btnCloseCert" aria-label="Yopish">✕</button>
+      
+      <div class="certificate-frame" id="printableCert">
+        <div class="cert-border">
+          <div class="cert-header">
+            <div class="cert-badge-gold">👑</div>
+            <span class="cert-org">CSS SEHRGARLARI AKADEMIYASI</span>
+            <h2 class="cert-title" id="certTitle">KICHIK CSS MASTERI</h2>
+            <p class="cert-subtitle">Faxriy Sertifikati</p>
+          </div>
+
+          <div class="cert-body">
+            <p class="cert-text">Ushbu sertifikat egasi CSS animatsiyalari, :hover, transition, scale, box-shadow va opacity sehrlarini a'lo darajada o'zlashtirgani uchun taqdirlanadi:</p>
+            <div class="cert-name-input-box">
+              <input type="text" id="studentNameInput" class="student-name-input" placeholder="Ism va Familiyangizni kiriting" value="Kichik Dasturchi">
+            </div>
+            <div class="cert-skills-badges">
+              <span class="badge-item">✨ :hover Sehri</span>
+              <span class="badge-item">🔮 Opacity Plashi</span>
+              <span class="badge-item">🔍 Scale Lupa</span>
+              <span class="badge-item">🚀 3D Box-Shadow</span>
+              <span class="badge-item">⏱️ Silliq Transition</span>
+            </div>
+          </div>
+
+          <div class="cert-footer">
+            <div class="cert-stamp">
+              <span class="stamp-icon">⭐</span>
+              <span class="stamp-text">TASDIQLANGAN 100%</span>
+            </div>
+            <div class="cert-date" id="certDate">Sana: 2026-yil</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-actions">
+        <button class="action-btn print-btn" id="btnPrintCert">🖨️ Sertifikatni Chop Etish / Saqlash</button>
+        <button class="action-btn continue-btn" id="btnContinueGame">Davom etish 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Engine and Script Modules -->
+  <script src="audio.js"></script>
+  <script src="slides.js"></script>
+  <script src="codelab.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
